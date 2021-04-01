@@ -1,0 +1,42 @@
+<!--
+Login:
+username: ”Challenge”
+password: ”ChallengePassword”
+
+Functionality:
+Get and print all players.
+-->
+<!DOCTYPE html>
+<html>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+   <body>
+      <div ng-app="myApp" ng-controller="myCtrl">
+         Username: <input ng-model="username">
+         Password: <input ng-model="password">
+         <button ng-click="login(username,password)">Login</button> 
+         <h1>Login status: {{success}}</h1>
+         <button ng-click="getAllPlayers(userToken)">Get All Players</button> 
+      </div>
+      <script>
+         var app = angular.module('myApp', []);
+         app.controller('myCtrl', function($scope, $http) {
+         $scope.username;
+         $scope.password;
+         $scope.success = "Fail";
+         $scope.userToken;
+         $scope.allPlayers;
+         $scope.login = function (username,password){
+           $http.get("http://cloud.smartsign.se/jsonservices/core/Login?username="+username+"&password="+password+"&loginMode=2").then(function(response) {
+             $scope.userToken = response.UserToken;
+             $scope.success = response.Success;
+           });
+         };
+         $scope.getAllPlayers = function (userToken){
+           $http.get("http://cloud.smartsign.se/jsonservices/admin/GetAllPlayers?userToken="+scope.userToken).then(function(response) {
+             $scope.allPlayers = response;
+           });
+         };
+         });
+      </script>
+   </body>
+</html>
